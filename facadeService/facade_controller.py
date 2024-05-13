@@ -7,11 +7,11 @@ import config
 logger = config.logging.getLogger(__name__)
 app = Flask(__name__)
 
+messages_service_url = config.MESSAGES_SERVICE_URL
 logging_service_urls = config.get_logging_service_urls() 
-message_service_urls = config.get_message_service_urls()
-# logging_service_urls, message_service_urls = config.LOGGING_SERVICE_URLS, config.MESSAGE_SERVICE_URLS
+# logging_service_urls = config.LOGGING_SERVICE_URLS
 endpoint_paths = config.ENDPOINT_PATHS
-facade_service = FacadeService(logging_service_urls, message_service_urls, endpoint_paths)
+facade_service = FacadeService(logging_service_urls, messages_service_url, endpoint_paths)
 
 @app.route('/messages', methods=['GET'])
 def get_messages() -> Response:

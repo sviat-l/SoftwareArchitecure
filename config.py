@@ -17,18 +17,15 @@ HAZELCAST_CLIENT_CONFIG = {
     ]
 }
 
-HAZELCAST_MESSAGE_MAP_NAME = "messages-map"
-HAZELCAST_MESSAGE_QUEUE_NAME =  "messages-queue"
-
 ### Manual ports ###
 FACADE_SERVICE_PORT = 42000
-MESSAGE_SERVICE_PORTS = [42010, 42011]
+MESSAGES_SERVICE_PORT = 42010
 LOGGING_SERVICE_PORTS = [42020, 42021, 42022]
 
 ##### Services URLs #####
 HOST_URL = "http://localhost"
 FACADE_SERVICE_URL = f"{HOST_URL}:{FACADE_SERVICE_PORT}"
-MESSAGE_SERVICE_URLS = [f"{HOST_URL}:{port}" for port in MESSAGE_SERVICE_PORTS]
+MESSAGES_SERVICE_URL = f"{HOST_URL}:{ MESSAGES_SERVICE_PORT}"
 LOGGING_SERVICE_URLS = [f"{HOST_URL}:{port}" for port in LOGGING_SERVICE_PORTS]
 
 
@@ -38,14 +35,13 @@ class ENDPOINT_PATHS:
         get_messages = "/messages"
         post_message = "/message"
     class messages:
-        get_messages = "/messages"
+        get_static_message = "/message"
     class facade:
         get_messages = "/messages"
         send_message = "/message"
 
 
 ##### Ports from files#####
-MESSAGES_SERVICE_PORTS_FILE = 'configs/ports/messages_services.txt'
 LOGGING_SERVICE_PORTS_FILE = 'configs/ports/logging_services.txt'
 
 def get_ports_from_file(file_path: str) -> list:
@@ -53,15 +49,9 @@ def get_ports_from_file(file_path: str) -> list:
         return [int(port) for port in file.read().splitlines()]
 
 def get_logging_service_ports(file:str=LOGGING_SERVICE_PORTS_FILE) -> list:
-    return get_ports_from_file(LOGGING_SERVICE_PORTS_FILE)
-
-def get_message_service_ports(file:str=MESSAGES_SERVICE_PORTS_FILE) -> list:
     return get_ports_from_file(file)
 
 #### Services URLs using ports from files ####
-
 def get_logging_service_urls() -> list:
     return [f"{HOST_URL}:{port}" for port in get_logging_service_ports()]
 
-def get_message_service_urls() -> list:
-    return [f"{HOST_URL}:{port}" for port in get_message_service_ports()]
