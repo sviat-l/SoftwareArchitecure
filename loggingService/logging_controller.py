@@ -1,9 +1,9 @@
 from logging_service import LoggingService
 from flask import Flask, request, Response
 import argparse
-import config
+import base
 
-logger = config.logging.getLogger(__name__)
+logger = base.logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def get_messages() -> Response:
     except Exception as e:
         logger.error(f"Failed to get all messages, error occured: {e}")
         return Response(status=500, response=f"Failed to get all messages:\n{e}")
-    messages_str = config.MESSAGES_SEPARATOR.join(messages)
+    messages_str = '|'.join(messages)
     logger.info(f"Successful GET method to logging service, returning all {len(messages)} messages")
     return Response(status=200, response=messages_str)
 
@@ -46,13 +46,22 @@ def shutdown() -> Response:
     return Response(status=200, response="Logging service successfully shut down")
 
 @app.route('/', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def home() -> Response:
     return Response(status=200, response="Welcome to the logging service")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--port", type=int, default=config.LOGGING_SERVICE_PORTS[0], help="Port number for the app service")
+    parser.add_argument("-p", "--port", type=int, help="Port number for the app service")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode for the service app")
     args = parser.parse_args()
+    
+    import threading
+    import time
+    def thread_register_service():
+        time.sleep(0.1)
+        logging_service.register_service()
+    t1 = threading.Thread(target=thread_register_service, daemon=True)
+    t1.start()
     app.run(port=args.port, debug=args.debug)
     

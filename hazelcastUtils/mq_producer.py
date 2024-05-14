@@ -1,14 +1,13 @@
-from typing import Dict, Any
 from hazelcastUtils.abstract_client import BaseHazelcastClient
-import config
+import base
 
-logger = config.logging.getLogger("Hazelcast-MQ-Producer")
+logger = base.logging.getLogger("Hazelcast-MQ-Producer")
                      
 class HazelcastMQProducer(BaseHazelcastClient):
-    def __init__(self, hc_config: Dict[str, Any], map_name: str):
+    def __init__(self, hc_config=None, mq_name=None):
         super().__init__(hc_config)
-        self.map_name = map_name
-        self.mq = self.get_hz_queue(self.map_name)
+        self.mq_name = mq_name if mq_name is not None else self.discover_mq_name()
+        self.mq = self.get_hz_queue(self.mq_name)
         
     def produce(self, message: str):
         try:
