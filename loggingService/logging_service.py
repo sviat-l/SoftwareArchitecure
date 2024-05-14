@@ -1,11 +1,11 @@
 from hazelcastUtils.abstract_client import BaseHazelcastClient
 from hazelcastUtils.abstract_client import discover_hc_config
 from consulUtils.consul_service import ConsulServiceClient
-import base
+import utils
 import uuid
 from typing import List
 
-logger = base.logging.getLogger(__name__)
+logger = utils.logging.getLogger(__name__)
 
 class LoggingService:
     def __init__(self):

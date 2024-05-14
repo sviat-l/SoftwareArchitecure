@@ -1,7 +1,7 @@
 from hazelcastUtils.abstract_client import BaseHazelcastClient
-import base
+import utils
 
-logger = base.logging.getLogger("Hazelcast-MQ-Producer")
+logger = utils.logging.getLogger("Hazelcast-MQ-Producer")
                      
 class HazelcastMQProducer(BaseHazelcastClient):
     def __init__(self, hc_config=None, mq_name=None):

@@ -1,5 +1,5 @@
 if [ "$#" -eq 0 ]; then
-    num_instances=2
+    num_instances=1
 fi
 
 if [ "$#" -eq 1 ]; then
@@ -15,9 +15,9 @@ fi
 export PYTHONPATH=.
 
 for ((i=0; i<=$num_instances; i++)); do
-    port=$((42010 + $i))
+    port=$((42000 + $i))
     export PORT=$port
-    python3 messagesService/messages_controller.py --port $port &
+    python3 facadeService/facade_controller.py --port $port &
 done
 
-echo "Started $num_instances receivedinstances of the Messages Service."
+echo "Started $num_instances receivedinstances of the Facade Service."

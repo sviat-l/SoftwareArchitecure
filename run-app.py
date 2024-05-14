@@ -1,4 +1,4 @@
-import base
+import utils
 import argparse
 
 def get_app(service_name: str):
@@ -18,16 +18,11 @@ if __name__ == '__main__':
                                            default = "facade", help="Service to run: logging, messages, facade")
     parser.add_argument("-p", "--port", type=int, help="Port number for the app service")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode for the service app")
-    
+    parser.add_argument("--host", type=str, help="Host address for the app service")
+    parser.set_defaults(host=utils.get_current_host())
     args = parser.parse_args()
     
     app, service = get_app(args.service)
-    import threading
-    import time
-    def thread_register_service():
-        time.sleep(0.1)
-        service.register_service()
-    t1 = threading.Thread(target=thread_register_service, daemon=True)
-    t1.start()
     
-    app.run(port=args.port, debug=args.debug)
+    service.register_service()
+    app.run(host=args.host, port=args.port, debug=args.debug)

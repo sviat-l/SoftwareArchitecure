@@ -1,9 +1,9 @@
 from hazelcastUtils.abstract_client import BaseHazelcastClient
 from threading import Thread, Lock
 from typing import List
-import base
+import utils
 
-logger = base.logging.getLogger("Hazelcast-MQ-Consumer")        
+logger = utils.logging.getLogger("Hazelcast-MQ-Consumer")        
         
 class HazelcastMQConsumer(BaseHazelcastClient):
     def __init__(self, hc_config=None, mq_name=None):

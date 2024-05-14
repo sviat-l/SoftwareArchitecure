@@ -12,17 +12,12 @@ if [ "$#" -gt 1 ]; then
     exit 1
 fi
 
-save_file="configs/ports/logging_services.txt"
-
-rm -f $save_file
-
 export PYTHONPATH=.
 
-echo "Starting $num_instances instances of the Logging Service..."
 for ((i=0; i<$num_instances; i++)); do
     port=$((42020 + $i))
+    export PORT=$port
     python3 loggingService/logging_controller.py --port $port &
-    echo $port >> $save_file
 done
 
 echo "Started $num_instances instances of the Logging Service."

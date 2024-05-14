@@ -1,18 +1,19 @@
 from typing import List
-import base
+import utils
 from hazelcastUtils.mq_consumer import HazelcastMQConsumer
 from consulUtils.consul_service import ConsulServiceClient
 from hazelcastUtils.abstract_client import discover_mq_name, discover_hc_config
 
-
-logger = base.logging.getLogger(__name__)
+logger = utils.logging.getLogger(__name__)
 
 class MessagesService:
     def __init__(self):
         self.consul_client = ConsulServiceClient()
+        self.consumer = None
         self.connect_to_hazelcast()
         
     def register_service(self):
+        logger.info("Registering messages_service with Consul")
         self.consul_client.register_service('messages_service')
         
     def connect_to_hazelcast(self):
@@ -28,7 +29,8 @@ class MessagesService:
         return self.consumer.get_consumed_messages()
 
     def close(self):
-        self.consumer.close
+        if self.consumer is not None:
+            self.consumer.__del__()
         
-    def __deler__(self):
+    def __del__(self):
         self.close()

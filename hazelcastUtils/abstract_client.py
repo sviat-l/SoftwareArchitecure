@@ -1,8 +1,8 @@
 import hazelcast
-import base
+import utils
 from consulUtils.consul_service import ConsulServiceClient
 
-logger = base.logging.getLogger("Abstract-Hazelcast-Client")
+logger = utils.logging.getLogger("Abstract-Hazelcast-Client")
 
 def discover_hc_config(consul_client: ConsulServiceClient) -> dict:
     logger.info("Discovering Hazelcast configuration via Consul")

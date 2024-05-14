@@ -1,10 +1,10 @@
 import consul
 import os
-import base
+import utils
 import socket
 from typing import List
 
-logger = base.logging.getLogger(__name__)
+logger = utils.logging.getLogger(__name__)
 
 class ConsulServiceClient:
     def __init__(self, port=None, host=None):
@@ -54,7 +54,10 @@ class ConsulServiceClient:
             service_id=service_id,
             address=host,
             port=port,
-            check={"http": f"http://{host}:{port}/health", "interval": "2s", "timeout": "1s"}
+            check={"http": f"http://{host}:{port}/health", 
+                   "interval": "10s", 
+                   "timeout": "1s"
+                   }
         )
         
     def deregister_service(self, service_name: str):

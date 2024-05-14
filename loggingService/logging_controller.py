@@ -1,9 +1,9 @@
 from logging_service import LoggingService
 from flask import Flask, request, Response
 import argparse
-import base
+import utils
 
-logger = base.logging.getLogger(__name__)
+logger = utils.logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -54,14 +54,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--port", type=int, help="Port number for the app service")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode for the service app")
+    parser.add_argument("--host", type=str, help="Host address for the app service")
+    parser.set_defaults(host=utils.get_current_host())
     args = parser.parse_args()
     
-    import threading
-    import time
-    def thread_register_service():
-        time.sleep(0.1)
-        logging_service.register_service()
-    t1 = threading.Thread(target=thread_register_service, daemon=True)
-    t1.start()
-    app.run(port=args.port, debug=args.debug)
-    
+    logging_service.register_service()
+    app.run(host=args.host, port=args.port, debug=args.debug)
