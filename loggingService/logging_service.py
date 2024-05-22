@@ -14,7 +14,7 @@ class LoggingService:
         
     def connect_to_hazelcast(self):
         self.client = HazelcastClient(**self.hazelcast_config)
-        self.map_name = str(uuid.uuid4())
+        self.map_name = "hz-distributed-map" #str(uuid.uuid4())
         self.map = self.client.get_map(self.map_name).blocking()
        
     def get_all_messages(self) -> List[str]:
